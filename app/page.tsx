@@ -1,5 +1,20 @@
 import ProjectList from "@/components/ProjectList";
 
+const projects = [
+  {
+    title: "Movie Finder",
+    description: "A web application to search for movies and save favorite titles.",
+    technologies: ["HTML", "CSS", "JavaScript", "Vite"],
+    link: "https://github.com/vikyrg05/movie-finder",
+  },
+  {
+    title: "CSE 340 Project",
+    description: "A web application built with Node.js, Express, and PostgreSQL.",
+    technologies: ["Node.js", "Express", "PostgreSQL", "EJS"],
+    link: "https://github.com/vikyrg05/cse340",
+  },
+];
+
 export default function Home() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-12">
@@ -15,7 +30,7 @@ export default function Home() {
 
       <section>
         <h2 className="text-2xl font-bold mb-6">My Projects</h2>
-        <ProjectList />
+        <ProjectList projects={projects} />
       </section>
     </div>
   );
