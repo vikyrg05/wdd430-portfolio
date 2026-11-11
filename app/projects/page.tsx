@@ -1,20 +1,10 @@
-"use client";
 
-import { useEffect, useState } from "react";
-import type { Project } from "@/lib/projects-db";
+import { getProjects } from "@/lib/projects-db";
 
-export default function ProjectsPage() {
-    const [projects, setProjects] = useState<Project[]>([]);
+export const dynamic = "force-dynamic";
 
-    useEffect(() => {
-        async function fetchProjects() {
-            const response = await fetch("/api/projects");
-            const data = await response.json();
-            setProjects(data);
-        }
-
-        fetchProjects();
-    }, []);
+export default async function ProjectsPage() {
+    const projects = await getProjects();
 
     return (
         <div className="max-w-5xl mx-auto px-6 py-12">
