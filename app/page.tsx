@@ -18,18 +18,22 @@ const projects = [
 export default function Home() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-12">
-      <section className="mb-10">
-        <h1 className="text-4xl font-bold mb-4">
+      <section className="mb-12">
+        <h1 className="text-4xl font-bold mb-5 text-[#3B2A22]">
           Welcome to My Portfolio
         </h1>
-        <p className="text-lg text-gray-600">
+
+        <p className="text-lg text-gray-600 leading-relaxed max-w-3xl">
           Hello! I am a software development student learning to build web
           applications. Here are some of my projects.
         </p>
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold mb-6">My Projects</h2>
+        <h2 className="text-2xl font-bold mb-6 text-[#3B2A22] border-b border-gray-200 pb-3">
+          My Projects
+        </h2>
+
         <ProjectList projects={projects} />
       </section>
     </div>
