@@ -1,20 +1,8 @@
-"use client";
 
-import { useEffect, useState } from "react";
-import type { Project } from "@/lib/projects-db";
+import { getProjects } from "@/lib/projects-db";
 
-export default function OpenSourcePage() {
-    const [projects, setProjects] = useState<Project[]>([]);
-
-    useEffect(() => {
-        async function fetchProjects() {
-            const response = await fetch("/api/projects?type=opensource");
-            const data = await response.json();
-            setProjects(data);
-        }
-
-        fetchProjects();
-    }, []);
+export default async function OpenSourcePage() {
+    const projects = await getProjects("opensource");
 
     return (
         <div className="py-6">
