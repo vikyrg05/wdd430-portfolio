@@ -7,7 +7,7 @@ import { useDebouncedCallback } from 'use-debounce';
 export default function ProjectSearch() {
     const searchParams = useSearchParams();
     const pathname = usePathname();
-    const { replace } = useRouter();
+    const { push } = useRouter();
 
     const handleSearch = useDebouncedCallback((term: string) => {
         const params = new URLSearchParams(searchParams);
@@ -19,7 +19,7 @@ export default function ProjectSearch() {
             params.delete('query');
         }
 
-        replace(`${pathname}?${params.toString()}`);
+        push(`${pathname}?${params.toString()}`);
     }, 300);
 
     return (
