@@ -1,10 +1,28 @@
 
-import { getProjects } from "@/lib/projects-db";
+import { Suspense } from "react";
+import {
+    fetchFilteredProjects,
+    fetchProjectsPages,
+} from "@/lib/projects-db";
+import ProjectSearch from "./ui/project-search";
+import Pagination from "./ui/pagination";
 
 export const dynamic = "force-dynamic";
 
-export default async function ProjectsPage() {
-    const projects = await getProjects();
+export default async function ProjectsPage(props: {
+    searchParams?: Promise<{ query?: string; page?: string }>;
+}) {
+    const searchParams = await props.searchParams;
+    const query = searchParams?.query || "";
+
+    const pageNumber = Number(searchParams?.page) || 1;
+    const currentPage =
+        Number.isInteger(pageNumber) && pageNumber > 0
+            ? pageNumber
+            : 1;
+
+    const projects = await fetchFilteredProjects(query, currentPage);
+    const totalPages = await fetchProjectsPages(query);
 
     return (
         <div className="max-w-5xl mx-auto px-6 py-12">
@@ -15,6 +33,10 @@ export default async function ProjectsPage() {
             <p className="text-lg text-gray-600 leading-relaxed">
                 Explore my open source and school projects.
             </p>
+
+            <Suspense fallback={<div className="mt-6 h-12" />}>
+                <ProjectSearch />
+            </Suspense>
 
             <div className="grid gap-6 mt-8 md:grid-cols-2">
                 {projects.map((project) => (
@@ -47,7 +69,19 @@ export default async function ProjectsPage() {
                         )}
                     </div>
                 ))}
+
+                {projects.length === 0 && (
+                    <p className="text-gray-600">
+                        No projects found.
+                    </p>
+                )}
             </div>
+
+            {totalPages > 1 && (
+                <Suspense fallback={<div className="mt-8 h-10" />}>
+                    <Pagination totalPages={totalPages} />
+                </Suspense>
+            )}
         </div>
     );
 }
