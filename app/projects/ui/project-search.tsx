@@ -25,6 +25,7 @@ export default function ProjectSearch() {
     return (
         <div className="relative mt-6">
             <input
+                key={searchParams.get('query') || ''}
                 type="search"
                 placeholder="Search projects..."
                 defaultValue={searchParams.get('query')?.toString()}
