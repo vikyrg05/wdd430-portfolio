@@ -1,10 +1,11 @@
-
-'use server';
+﻿'use server';
 
 import { sql } from '@vercel/postgres';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { auth, signIn } from '@/auth';
+import { AuthError } from 'next-auth';
 
 export type State = {
     errors?: {
@@ -47,6 +48,36 @@ const ProjectFormSchema = z.object({
     link: z.union([z.string().url(), z.literal('')]),
 });
 
+async function requireOwnerSession() {
+    const session = await auth();
+
+    if (!session?.user) {
+        throw new Error('Not authenticated');
+    }
+
+    return session;
+}
+
+export async function authenticate(
+    prevState: string | undefined,
+    formData: FormData
+) {
+    try {
+        await signIn('credentials', formData);
+    } catch (error) {
+        if (error instanceof AuthError) {
+            switch (error.type) {
+                case 'CredentialsSignin':
+                    return 'Invalid email or password.';
+                default:
+                    return 'Something went wrong.';
+            }
+        }
+
+        throw error;
+    }
+}
+
 function validateProject(formData: FormData) {
     const raw = {
         title: formData.get('title'),
@@ -76,6 +107,8 @@ export async function createProject(
     prevState: State,
     formData: FormData
 ): Promise<State> {
+    await requireOwnerSession();
+
     const validatedFields = CreateProjectSchema.safeParse({
         title: formData.get('title'),
         description: formData.get('description'),
@@ -126,11 +159,14 @@ export async function createProject(
         };
     }
 
+    revalidatePath('/dashboard/projects');
     revalidatePath('/projects');
-    redirect('/projects');
+    redirect('/dashboard/projects');
 }
 
 export async function updateProject(id: string, formData: FormData) {
+    await requireOwnerSession();
+
     const projectId = Number(id);
 
     if (!Number.isInteger(projectId) || projectId <= 0) {
@@ -150,11 +186,14 @@ export async function updateProject(id: string, formData: FormData) {
         WHERE id = ${projectId}
     `;
 
+    revalidatePath('/dashboard/projects');
     revalidatePath('/projects');
-    redirect('/projects');
+    redirect('/dashboard/projects');
 }
 
 export async function deleteProject(id: string, _formData: FormData) {
+    await requireOwnerSession();
+
     const projectId = Number(id);
 
     if (!Number.isInteger(projectId) || projectId <= 0) {
@@ -166,6 +205,7 @@ export async function deleteProject(id: string, _formData: FormData) {
         WHERE id = ${projectId}
     `;
 
+    revalidatePath('/dashboard/projects');
     revalidatePath('/projects');
-    redirect('/projects');
+    redirect('/dashboard/projects');
 }

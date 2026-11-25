@@ -4,7 +4,6 @@ import {
     fetchFilteredProjects,
     fetchProjectsPages,
 } from "@/lib/projects-db";
-import { deleteProject } from "@/app/lib/actions";
 import ProjectSearch from "./ui/project-search";
 import Pagination from "./ui/pagination";
 
@@ -34,13 +33,6 @@ export default async function ProjectsPage(props: {
             <p className="text-lg text-gray-600 leading-relaxed">
                 Explore my open source and school projects.
             </p>
-
-            <Link
-                href="/projects/create"
-                className="inline-block mt-6 bg-[#3B2A22] text-white px-6 py-3 rounded-lg hover:opacity-90"
-            >
-                New Project
-            </Link>
 
             <Suspense fallback={<div className="mt-6 h-12" />}>
                 <ProjectSearch />
@@ -76,27 +68,13 @@ export default async function ProjectsPage(props: {
                             </a>
                         )}
 
-                        <div className="flex gap-4 mt-5">
+                        <div className="mt-5">
                             <Link
-                                href={`/projects/${project.id}/edit`}
-                                className="text-blue-600 hover:underline"
+                                href={`/projects/${project.id}`}
+                                className="text-[#3B2A22] font-semibold hover:underline"
                             >
-                                Edit
+                                View Details
                             </Link>
-
-                            <form
-                                action={deleteProject.bind(
-                                    null,
-                                    String(project.id)
-                                )}
-                            >
-                                <button
-                                    type="submit"
-                                    className="text-red-600 hover:underline"
-                                >
-                                    Delete
-                                </button>
-                            </form>
                         </div>
                     </div>
                 ))}

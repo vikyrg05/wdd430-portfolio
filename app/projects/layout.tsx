@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 export default function ProjectsLayout({
     children,
@@ -13,13 +13,6 @@ export default function ProjectsLayout({
                     className="text-[#3B2A22] font-semibold hover:text-[#8B6B52] transition-colors"
                 >
                     Overview
-                </Link>
-
-                <Link
-                    href="/projects/settings"
-                    className="text-[#3B2A22] font-semibold hover:text-[#8B6B52] transition-colors"
-                >
-                    Settings
                 </Link>
             </nav>
 
