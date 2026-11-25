@@ -1,12 +1,49 @@
-﻿import Link from 'next/link';
+﻿
+import type { Metadata } from 'next';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getProjectById } from '@/lib/projects-db';
 
+type Props = {
+    params: Promise<{ id: string }>;
+};
+
+export async function generateMetadata({
+    params,
+}: Props): Promise<Metadata> {
+    const { id } = await params;
+    const projectId = Number(id);
+
+    if (!Number.isInteger(projectId) || projectId <= 0) {
+        return {
+            title: 'Project Not Found',
+            description: 'The requested project could not be found.',
+        };
+    }
+
+    const project = await getProjectById(projectId);
+
+    if (!project) {
+        return {
+            title: 'Project Not Found',
+            description: 'The requested project could not be found.',
+        };
+    }
+
+    return {
+        title: project.title,
+        description: project.description,
+        openGraph: {
+            title: project.title,
+            description: project.description,
+            images: ['/opengraph-image.png'],
+        },
+    };
+}
+
 export default async function ProjectDetailsPage({
     params,
-}: {
-    params: Promise<{ id: string }>;
-}) {
+}: Props) {
     const { id } = await params;
     const projectId = Number(id);
 

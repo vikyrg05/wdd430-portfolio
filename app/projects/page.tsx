@@ -1,4 +1,6 @@
-﻿import { Suspense } from "react";
+﻿
+import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import {
     fetchFilteredProjects,
@@ -6,6 +8,12 @@ import {
 } from "@/lib/projects-db";
 import ProjectSearch from "./ui/project-search";
 import Pagination from "./ui/pagination";
+
+export const metadata: Metadata = {
+    title: "Projects",
+    description:
+        "Explore Virginia Rocha's software development projects, including open source contributions, school projects, and the technologies used to build them.",
+};
 
 export const dynamic = "force-dynamic";
 

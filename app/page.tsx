@@ -1,4 +1,12 @@
+
+import type { Metadata } from "next";
 import ProjectList from "@/components/ProjectList";
+
+export const metadata: Metadata = {
+  title: "Home | Project Portfolio",
+  description:
+    "Welcome to Virginia Rocha's software development portfolio. Explore web applications and projects built with modern web technologies.",
+};
 
 const projects = [
   {

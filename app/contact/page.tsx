@@ -1,3 +1,12 @@
+
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Contact",
+    description:
+        "Find contact information for Virginia Rocha and learn how to get in touch about her software development portfolio and projects.",
+};
+
 export default function ContactPage() {
     return (
         <div className="max-w-5xl mx-auto px-6 py-12">
